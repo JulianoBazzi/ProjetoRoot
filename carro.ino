@@ -40,7 +40,7 @@ void sensorEsq() {
   digitalWrite(gatilho, LOW);
   tempo=pulseIn(echo, HIGH);
   distancia_esq = tempo/29.4/2;     //ate aqui calcula a distancia no sensor da direita
-  Serial.print("Distancia Esqueda: ");
+  Serial.print("Distancia Esquerda: ");
   Serial.println(distancia_esq);
 
 }
@@ -56,11 +56,12 @@ void sensorDir(){
 
 
 void reto(){
-  myservo.write(40);  //40 graus vai reto
+  myservo.write(35);  //40 graus vai reto
 }
 
 void parar(){
   motor1.run(RELEASE);  //para o motor
+  Serial.println("Parando e Olhando!");
 }  
 
 void frente(){
@@ -91,9 +92,9 @@ void viraDir() {
 
 void led1() {
   digitalWrite(34,HIGH);
-  delay(100);
+  delay(500);
   digitalWrite(34,LOW);
-  delay(100);
+  delay(500);
 } 
 
 void led2() {
@@ -107,23 +108,24 @@ void led2() {
 void loop(){
   sensorEsq(); // pega a distancia sensor esquerda
   sensorDir(); // pega a distancia sensor direita
-  if (distancia_esq < 60 && distancia_dir < 60) {
+  reto();
+  if (distancia_esq < 60 || distancia_dir < 60) {
     parar();
     if (distancia_esq < 20 || distancia_dir < 20){
       Serial.println("Distancia da Esquerda e Direita é MENOR que 20cm");        
       led1();
       led2();
       traz();
-      delay(3000);
+      delay(1500);
     }
-    else if (distancia_esq > distancia_dir) { 
+    if (distancia_esq > distancia_dir) { 
       Serial.println("Distancia da Esquerda MAIOR que a da Direita");
       led1();
       viraEsq();
       frente();
       delay(1000);
     }
-    else if (distancia_esq < distancia_dir) {
+    if (distancia_esq < distancia_dir) {
       Serial.println("Distancia da Esquerda MENOR que a da Direita");
       led2();
       viraDir();
@@ -131,7 +133,6 @@ void loop(){
       delay(1000);
     }
   }
-  reto();
   frente();
 }
 
