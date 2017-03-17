@@ -34,7 +34,7 @@ void setup()
   motor1.setSpeed(veloc); //Define a Velocidade do Motor com a bateria nova deve ser 46
 
 }
-void sensoresq() {
+void sensorEsq() {
   digitalWrite(gatilho,HIGH);
   delayMicroseconds(10);
   digitalWrite(gatilho, LOW);
@@ -44,7 +44,7 @@ void sensoresq() {
   Serial.println(distancia_esq);
 
 }
-void sensordir(){
+void sensorDir(){
   digitalWrite(gatilho1,HIGH);
   delayMicroseconds(10);
   digitalWrite(gatilho1, LOW);
@@ -76,13 +76,13 @@ void traz(){
 }
 
 
-void viraesq() {
+void viraEsq() {
   myservo.write(15);  //Move o servo para o angulo de 15 graus
   Serial.println("Virando Esquerda... ");   
   led1();
 }
 
-void viradir() {
+void viraDir() {
   myservo.write(70);  //Move o servo para o angulo de 70 graus
   Serial.println("Virando Direita... ");
   led2();
@@ -104,53 +104,35 @@ void led2() {
 } 
 
 
-void loop()
-{
+void loop(){
+  sensorEsq(); // pega a distancia sensor esquerda
+  sensorDir(); // pega a distancia sensor direita
+  if (distancia_esq < 60 && distancia_dir < 60) {
+    parar();
+    if (distancia_esq < 20 || distancia_dir < 20){
+      Serial.println("Distancia da Esquerda e Direita é MENOR que 20cm");        
+      led1();
+      led2();
+      traz();
+      delay(3000);
+    }
+    else if (distancia_esq > distancia_dir) { 
+      Serial.println("Distancia da Esquerda MAIOR que a da Direita");
+      led1();
+      viraEsq();
+      frente();
+      delay(1000);
+    }
+    else if (distancia_esq < distancia_dir) {
+      Serial.println("Distancia da Esquerda MENOR que a da Direita");
+      led2();
+      viraDir();
+      frente();
+      delay(1000);
+    }
+  }
   reto();
   frente();
-  distesq_ant = distancia_esq;
-  distdir_ant = distancia_dir;
-  sensoresq(); // pega a distancia sensor esquerda
-  sensordir(); // pega a distancia sensor direita
-  if (distancia_esq < 60 && distancia_dir < 60) {
-//    while (distancia_esq < 50 && distancia_dir < 50){
-      parar();
-      delay(200);
-      Serial.println("Entrou no While!");
-      if (distancia_esq < 20 || distancia_dir < 20){
-        Serial.println("distancia_esq < 20 || distancia_dir < 20");        
-        parar();   
-        led2();
-        led1();
-        if (distancia_esq > distancia_dir) { 
-          viradir();
-          traz();
-          delay(1000);
-        }
-        else if (distancia_esq < distancia_dir) {
-          viraesq();
-          traz();
-          delay(1000);          
-        }
-      }
-      else if (distancia_esq > distancia_dir) { 
-        viraesq();
-        Serial.println("distancia_esq > distancia_dir");
-        frente();
-        delay(1000);
-//        sensoresq();
-//        sensordir();
-      }
-      else if (distancia_esq < distancia_dir) {
-        Serial.println("distancia_dir > distancia_esq");
-        viradir();
-        frente();
-        delay(1000);
-//        sensoresq();
-//        sensordir();
-      }
-//    }
-  }
 }
 
 
