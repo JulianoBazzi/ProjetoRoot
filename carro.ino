@@ -19,8 +19,7 @@ int veloc = 254; //define velocidade do motor
 float distesq_ant = 0;
 float distdir_ant = 0;
 
-void setup()
-{
+void setup(){
   myservo.attach(10);
   pinMode(gatilho1,OUTPUT);
   pinMode(10,OUTPUT);
@@ -34,7 +33,56 @@ void setup()
   motor1.setSpeed(veloc); //Define a Velocidade do Motor com a bateria nova deve ser 46
 
 }
-void sensorEsq() {
+
+void led1(){
+  static unsigned long delayPisca; 
+  if ( (millis() - delayPisca) < 500) {
+       digitalWrite(21,HIGH);
+  } else {  
+       digitalWrite(21,LOW);
+  }
+  if ( (millis() - delayPisca) >= 1000){
+    delayPisca = millis();
+  }
+} 
+
+void led2(){
+  static unsigned long delayPisca2; 
+  if ( (millis() - delayPisca) < 500) {
+       digitalWrite(20,HIGH);
+  } else {  
+       digitalWrite(20,LOW);
+  }
+  if ( (millis() - delayPisca2) >= 1000){
+    delayPisca2 = millis();
+  }
+} 
+
+void led3(){
+  static unsigned long delayPisca3; 
+  if ( (millis() - delayPisca) < 500) {
+       digitalWrite(19,HIGH);
+  } else {  
+       digitalWrite(19,LOW);
+  }
+    if ( (millis() - delayPisca3) >= 1000){
+    delayPisca3 = millis();
+  }
+} 
+
+void led4(){
+  static unsigned long delayPisca4; 
+  if ( (millis() - delayPisca) < 500) {
+       digitalWrite(18,HIGH);
+  } else {  
+       digitalWrite(18,LOW);
+  }
+    if ( (millis() - delayPisca4) >= 1000){
+    delayPisca4 = millis();
+  }
+} 
+
+void sensorEsq(){
   digitalWrite(gatilho,HIGH);
   delayMicroseconds(10);
   digitalWrite(gatilho, LOW);
@@ -71,39 +119,29 @@ void frente(){
 }
 
 void traz(){
-  motor1.run(BACKWARD);  //aciona para traz
-  Serial.print("Marcha Re Velocidade Atual:");
-  Serial.println(veloc);
+  led4();
+  if ((millis() - delayTempo) < 1500)
+  {
+     motor1.run(BACKWARD);  //aciona para traz
+     Serial.print("Marcha Re Velocidade Atual:");
+     Serial.println(veloc);
+  } else {
+    parar();
+  }
 }
 
 
-void viraEsq() {
+void viraEsq(){
   myservo.write(15);  //Move o servo para o angulo de 15 graus
   Serial.println("Virando Esquerda... ");   
   led1();
 }
 
-void viraDir() {
+void viraDir(){
   myservo.write(70);  //Move o servo para o angulo de 70 graus
   Serial.println("Virando Direita... ");
   led2();
 }
-
-
-void led1() {
-  digitalWrite(34,HIGH);
-  delay(500);
-  digitalWrite(34,LOW);
-  delay(500);
-} 
-
-void led2() {
-  digitalWrite(35,HIGH);
-  delay(500);
-  digitalWrite(35,LOW);
-  delay(500);
-} 
-
 
 void loop(){
   sensorEsq(); // pega a distancia sensor esquerda
@@ -132,11 +170,9 @@ void loop(){
       frente();
       delay(1000);
     }
+  } else {
+    led3();
+    Serial.println("Tudo Limpo! Segue em frente!");   
+    frente();
   }
-  frente();
 }
-
-
-
-
-
