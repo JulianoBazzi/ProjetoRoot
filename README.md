@@ -15,4 +15,4 @@ Projeto desenvolvido pela turma de Sistemas de Informação da Faculdades Integr
 * Faculdades Integradas de Rondonópolis - FAIR
 
 ### Vídeos
-* [Robô Explorador](https://www.youtube.com.br/) 
+* [Robô Explorador](https://www.youtube.com/watch?v=N5KW5LRZ_wk) 
